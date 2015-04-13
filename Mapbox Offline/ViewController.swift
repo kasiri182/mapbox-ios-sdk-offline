@@ -113,7 +113,7 @@ class ViewController: UIViewController,
         }
     }
 
-    // MARK: - Alert View
+    // MARK: - Alert Delegate
 
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if (buttonIndex == 1) {
