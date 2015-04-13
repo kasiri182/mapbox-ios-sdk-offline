@@ -63,7 +63,8 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             formatter.groupingSeparator = ","
             var message = "Download \(formatter.stringFromNumber(tileCount)!) map tiles now?"
             if (tileCount > 1000) {
-                message += " This may take a long time. It is recommended that you connect to Wi-Fi and plug in the device."
+                message += " Caching may take a long time. It is recommended"
+                message += " that you connect to Wi-Fi and plug in the device."
             }
             return message
             }()
