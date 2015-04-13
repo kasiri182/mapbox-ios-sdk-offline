@@ -29,15 +29,37 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
         RMConfiguration.sharedInstance().accessToken =
             "pk.eyJ1IjoianVzdGluIiwiYSI6IlpDbUJLSUEifQ.4mG8vhelFMju6HpIY-Hi5A"
 
-        map = RMMapView(frame: view.bounds,
-            andTilesource: RMMapboxSource(mapID: "mapbox.streets"))
-        map.autoresizingMask = .FlexibleWidth | .FlexibleHeight
-        map.setZoom(13, atCoordinate: map.centerCoordinate, animated: false)
+        // configure map tile source based on previous metadata if available
+        var tileSource: RMMapboxSource?
+        if (NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") != nil) {
+            tileSource = RMMapboxSource(tileJSON:
+                NSUserDefaults.standardUserDefaults().objectForKey("tileJSON")! as! String)
+        } else {
+            tileSource = RMMapboxSource(mapID: "mapbox.streets")
+        }
 
-        // never expire tiles
-        map.tileCache = RMTileCache(expiryPeriod: 0)
+        // only proceed if either pre-cached or online
+        if (tileSource == nil) {
+            UIAlertView(title: "Must Start Online",
+                message: "This app requires a first run while online.",
+                delegate: nil,
+                cancelButtonTitle: "OK").show()
+        } else {
+            map = RMMapView(frame: view.bounds, andTilesource: tileSource!)
+            map.autoresizingMask = .FlexibleWidth | .FlexibleHeight
+            map.setZoom(13, atCoordinate: map.centerCoordinate, animated: false)
 
-        view.addSubview(map)
+            // never expire tiles
+            map.tileCache = RMTileCache(expiryPeriod: 0)
+
+            // store TileJSON for tile source if not already
+            if (NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") == nil) {
+                let tileJSON = (map.tileSource as! RMMapboxSource).tileJSON
+                NSUserDefaults.standardUserDefaults().setObject(tileJSON, forKey: "tileJSON")
+            }
+
+            view.addSubview(map)
+        }
     }
 
     // MARK: - Actions
