@@ -72,6 +72,8 @@ class ViewController: UIViewController,
 
         map.removeAllCachedImages()
 
+        NSUserDefaults.standardUserDefaults().removeObjectForKey("tileJSON")
+
         UIAlertView(title: "Offline Cache Cleared",
             message: "The offline map tile cache was cleared.",
             delegate: nil,
