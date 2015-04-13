@@ -29,6 +29,10 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             andTilesource: RMMapboxSource(mapID: "mapbox.streets"))
         map.autoresizingMask = .FlexibleWidth | .FlexibleHeight
         map.setZoom(13, atCoordinate: map.centerCoordinate, animated: false)
+
+        // never expire tiles
+        map.tileCache = RMTileCache(expiryPeriod: 0)
+
         view.addSubview(map)
     }
 
