@@ -53,12 +53,6 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             // never expire tiles
             map.tileCache = RMTileCache(expiryPeriod: 0)
 
-            // store TileJSON for tile source if not already
-            if (NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") == nil) {
-                let tileJSON = (map.tileSource as! RMMapboxSource).tileJSON
-                NSUserDefaults.standardUserDefaults().setObject(tileJSON, forKey: "tileJSON")
-            }
-
             view.addSubview(map)
         }
     }
@@ -104,6 +98,12 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if (buttonIndex == 1) {
             map.removeAllCachedImages()
+
+            // store TileJSON metadata for tile source if not already
+            if (NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") == nil) {
+                let tileJSON = (map.tileSource as! RMMapboxSource).tileJSON
+                NSUserDefaults.standardUserDefaults().setObject(tileJSON, forKey: "tileJSON")
+            }
 
             let hud = MBProgressHUD(view: self.navigationController!.view)
             hud.mode = .DeterminateHorizontalBar
