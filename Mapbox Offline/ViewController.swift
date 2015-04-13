@@ -37,9 +37,8 @@ class ViewController: UIViewController,
 
         // configure map tile source based on previous metadata if available
         var tileSource: RMMapboxSource?
-        if (NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") != nil) {
-            tileSource = RMMapboxSource(tileJSON:
-                NSUserDefaults.standardUserDefaults().objectForKey("tileJSON")! as! String)
+        if let tileJSON = NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") as? String {
+            tileSource = RMMapboxSource(tileJSON: tileJSON)
         } else {
             tileSource = RMMapboxSource(mapID: "mapbox.streets")
         }
