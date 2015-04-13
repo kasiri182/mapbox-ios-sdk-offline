@@ -14,6 +14,10 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
 
         self.title = "Mapbox Offline"
 
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash,
+            target: self,
+            action: "emptyCache")
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Organize,
             target: self,
             action: "promptDownload")
@@ -37,6 +41,15 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
     }
 
     // MARK: - Actions
+
+    func emptyCache() {
+        map.removeAllCachedImages()
+        UIAlertView(title: "Offline Cache Cleared",
+            message: "The offline map tile cache was cleared.",
+            delegate: nil,
+            cancelButtonTitle: "OK").show()
+        map.reloadTileSource(map.tileSource)
+    }
 
     func promptDownload() {
         let tileCount = map.tileCache.tileCountForSouthWest(map.latitudeLongitudeBoundingBox().southWest,
