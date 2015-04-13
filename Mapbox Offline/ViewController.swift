@@ -107,7 +107,7 @@ class ViewController: UIViewController,
     func updateTitle() {
         for cache in map.tileCache.tileCaches {
             if let fileCache = cache as? RMDatabaseCache {
-                let megabytes = String(fileCache.fileSize() / 1024 / 1024)
+                let megabytes = fileCache.fileSize() / 1024 / 1024
                 self.title = "\(baseTitle) (\(megabytes) MB)"
             }
         }
