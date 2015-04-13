@@ -128,11 +128,9 @@ class ViewController: UIViewController,
         if (buttonIndex == 1) {
             map.removeAllCachedImages()
 
-            // store TileJSON metadata for tile source if not already
-            if (NSUserDefaults.standardUserDefaults().objectForKey("tileJSON") == nil) {
-                let tileJSON = (map.tileSource as! RMMapboxSource).tileJSON
-                NSUserDefaults.standardUserDefaults().setObject(tileJSON, forKey: "tileJSON")
-            }
+            // update cached TileJSON metadata for tile source
+            let tileJSON = (map.tileSource as! RMMapboxSource).tileJSON
+            NSUserDefaults.standardUserDefaults().setObject(tileJSON, forKey: "tileJSON")
 
             let hud = MBProgressHUD(view: self.navigationController!.view)
             hud.labelText = "Downloading..."
