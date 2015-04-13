@@ -16,6 +16,8 @@ class ViewController: UIViewController,
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        self.view.backgroundColor = UIColor.whiteColor()
+
         self.title = baseTitle
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash,
