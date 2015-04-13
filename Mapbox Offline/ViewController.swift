@@ -11,7 +11,9 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
 
     override func viewDidLoad() {
         super.viewDidLoad()
+
         self.title = "Mapbox Offline"
+
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Organize,
             target: self,
             action: "promptDownload")
@@ -19,8 +21,10 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+
         RMConfiguration.sharedInstance().accessToken =
             "pk.eyJ1IjoianVzdGluIiwiYSI6IlpDbUJLSUEifQ.4mG8vhelFMju6HpIY-Hi5A"
+
         map = RMMapView(frame: view.bounds,
             andTilesource: RMMapboxSource(mapID: "mapbox.streets"))
         map.autoresizingMask = .FlexibleWidth | .FlexibleHeight
@@ -35,6 +39,7 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             northEast: map.latitudeLongitudeBoundingBox().northEast,
             minZoom: UInt(map.zoom),
             maxZoom: maxDownloadZoom)
+
         let message: String = {
             let formatter = NSNumberFormatter()
             formatter.usesGroupingSeparator = true
@@ -45,6 +50,7 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             }
             return message
             }()
+
         UIAlertView(title: "Download?",
             message: message,
             delegate: self,
@@ -57,11 +63,13 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
     func alertView(alertView: UIAlertView, clickedButtonAtIndex buttonIndex: Int) {
         if (buttonIndex == 1) {
             map.removeAllCachedImages()
+
             let hud = MBProgressHUD(view: self.navigationController!.view)
             hud.mode = .DeterminateHorizontalBar
             hud.minShowTime = 1
             self.navigationController!.view.addSubview(hud)
             hud.show(true)
+
             map.tileCache.backgroundCacheDelegate = self
             map.tileCache.beginBackgroundCacheForTileSource(map.tileSource,
                 southWest: map.latitudeLongitudeBoundingBox().southWest,
