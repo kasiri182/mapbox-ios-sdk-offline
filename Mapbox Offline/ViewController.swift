@@ -66,6 +66,10 @@ class ViewController: UIViewController,
     // MARK: - Actions
 
     func emptyCache() {
+        if (map == nil) {
+            return
+        }
+
         map.removeAllCachedImages()
 
         UIAlertView(title: "Offline Cache Cleared",
@@ -79,6 +83,10 @@ class ViewController: UIViewController,
     }
 
     func promptDownload() {
+        if (map == nil) {
+            return
+        }
+
         let tileCount = map.tileCache.tileCountForSouthWest(map.latitudeLongitudeBoundingBox().southWest,
             northEast: map.latitudeLongitudeBoundingBox().northEast,
             minZoom: UInt(map.zoom),
