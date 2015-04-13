@@ -2,17 +2,21 @@ import UIKit
 import MBProgressHUD
 import Mapbox_iOS_SDK
 
-class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgroundDelegate {
+class ViewController: UIViewController,
+                      UIAlertViewDelegate,
+                      RMTileCacheBackgroundDelegate,
+                      RMMapViewDelegate {
 
     var map: RMMapView!
     let maxDownloadZoom: UInt = 17
+    let baseTitle = "Mapbox Offline"
 
     // MARK: - Setup
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.title = "Mapbox Offline"
+        self.title = baseTitle
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(barButtonSystemItem: .Trash,
             target: self,
@@ -46,6 +50,7 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
                 cancelButtonTitle: "OK").show()
         } else {
             map = RMMapView(frame: view.bounds, andTilesource: tileSource!)
+            map.delegate = self
             map.autoresizingMask = .FlexibleWidth | .FlexibleHeight
             map.setZoom(13, atCoordinate: map.centerCoordinate, animated: false)
             map.maxZoom = Float(maxDownloadZoom)
@@ -61,11 +66,15 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
 
     func emptyCache() {
         map.removeAllCachedImages()
+
         UIAlertView(title: "Offline Cache Cleared",
             message: "The offline map tile cache was cleared.",
             delegate: nil,
             cancelButtonTitle: "OK").show()
+
         map.reloadTileSource(map.tileSource)
+
+        updateTitle()
     }
 
     func promptDownload() {
@@ -91,6 +100,15 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             delegate: self,
             cancelButtonTitle: "Cancel",
             otherButtonTitles: "Download").show()
+    }
+
+    func updateTitle() {
+        for cache in map.tileCache.tileCaches {
+            if let fileCache = cache as? RMDatabaseCache {
+                let megabytes = String(fileCache.fileSize() / 1024 / 1024)
+                self.title = "\(baseTitle) (\(megabytes) MB)"
+            }
+        }
     }
 
     // MARK: - Alert View
@@ -129,6 +147,14 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
     func tileCacheDidFinishBackgroundCache(tileCache: RMTileCache!) {
         MBProgressHUD(forView: self.navigationController!.view).hide(true)
         MBProgressHUD(forView: self.navigationController!.view).removeFromSuperview()
+
+        updateTitle()
+}
+
+    // MARK: - Map Delegate
+
+    func mapViewRegionDidChange(mapView: RMMapView!) {
+        updateTitle()
     }
 
 }
