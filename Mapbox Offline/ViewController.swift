@@ -152,7 +152,7 @@ class ViewController: UIViewController,
         MBProgressHUD(forView: self.navigationController!.view).removeFromSuperview()
 
         updateTitle()
-}
+    }
 
     // MARK: - Map Delegate
 
