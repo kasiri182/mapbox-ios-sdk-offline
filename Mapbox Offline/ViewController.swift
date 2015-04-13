@@ -48,6 +48,7 @@ class ViewController: UIViewController, UIAlertViewDelegate, RMTileCacheBackgrou
             map = RMMapView(frame: view.bounds, andTilesource: tileSource!)
             map.autoresizingMask = .FlexibleWidth | .FlexibleHeight
             map.setZoom(13, atCoordinate: map.centerCoordinate, animated: false)
+            map.maxZoom = Float(maxDownloadZoom)
 
             // never expire tiles
             map.tileCache = RMTileCache(expiryPeriod: 0)
