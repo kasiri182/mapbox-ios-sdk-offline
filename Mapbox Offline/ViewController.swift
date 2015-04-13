@@ -126,6 +126,7 @@ class ViewController: UIViewController,
             }
 
             let hud = MBProgressHUD(view: self.navigationController!.view)
+            hud.labelText = "Downloading..."
             hud.mode = .DeterminateHorizontalBar
             hud.minShowTime = 1
             self.navigationController!.view.addSubview(hud)
